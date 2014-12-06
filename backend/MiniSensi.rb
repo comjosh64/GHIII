@@ -41,7 +41,7 @@ class MiniSensi
   end
 end
 
-id_counter = 1
+ids = (0...1000).to_a
 sensi_bin = []
 
 poor_sensi = {
@@ -60,31 +60,34 @@ rich_sensi = {
   :working_heat_setpoint => Proc.new { rand(70..72) }
 }
 
-(0..10).each {|n|
+(0..100).each {|n|
   sensi = poor_sensi.clone
-  sensi[:id] = id_counter and id_counter += 1
+  sensi[:id] = ids.sample
+  ids.delete(sensi[:id])
+
+  sensi_bin.push(MiniSensi.new(sensi))
+}
+
+(0..800).each {|n|
+  sensi = medium_sensi.clone
+  sensi[:id] = ids.sample
+  ids.delete(sensi[:id])
 
   sensi_bin.push(MiniSensi.new(sensi))
 }
 
 (0..100).each {|n|
-  sensi = medium_sensi.clone
-  sensi[:id] = id_counter and id_counter += 1
-
-  sensi_bin.push(MiniSensi.new(sensi))
-}
-
-(0..10).each {|n|
   sensi = rich_sensi.clone
-  sensi[:id] = id_counter and id_counter += 1
+  sensi[:id] = ids.sample
+  ids.delete(sensi[:id])
 
   sensi_bin.push(MiniSensi.new(sensi))
 }
 
 require 'json'
 while(true) 
-  data = (0..1000).map { sensi_bin.sample.generate }
-  puts data.to_json
-  exit
+  data = (0..100).map { sensi_bin.sample.generate }
+  # puts data.to_json
+  File.open('/home/dummey/Documents/GHIII/backendUI/test/update.json', 'w+') { |file| file.write(data.to_json) }
   sleep 1
 end
