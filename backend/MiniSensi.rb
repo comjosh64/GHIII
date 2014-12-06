@@ -81,7 +81,8 @@ rich_sensi = {
   sensi_bin.push(MiniSensi.new(sensi))
 }
 
+puts '['
 (0..100).each do
-  puts sensi_bin.sample.generate
+  puts sensi_bin.sample.generate.to_s + ","
 end
-
+puts ']'
