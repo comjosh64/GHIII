@@ -82,7 +82,9 @@ rich_sensi = {
 }
 
 require 'json'
-
-data = (0..100).map { sensi_bin.sample.generate }
-
-p data.to_json
+while(true) 
+  data = (0..1000).map { sensi_bin.sample.generate }
+  puts data.to_json
+  exit
+  sleep 1
+end
