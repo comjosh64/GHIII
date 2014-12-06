@@ -81,7 +81,10 @@ rich_sensi = {
   sensi_bin.push(MiniSensi.new(sensi))
 }
 
-(0..100).each do
-  puts sensi_bin.sample.generate
+require 'json'
+while(true) 
+  data = (0..1000).map { sensi_bin.sample.generate }
+  puts data.to_json
+  exit
+  sleep 1
 end
-
