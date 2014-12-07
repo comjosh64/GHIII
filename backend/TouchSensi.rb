@@ -16,7 +16,7 @@ put '/submit' do
   puts params
 
   params['id'] = {
-    '36-6f-92-ff-fe-01-39-e9' => 1,
+    '36-6f-92-ff-fe-01-39-e9' => 0,
   }[params['']]
 
   mini_sensi = MiniSensi.new(:temperature => Integer(params['temperature']), :id => params['id'])
