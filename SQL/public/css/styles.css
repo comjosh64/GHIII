@@ -1,0 +1,93 @@
+/**
+ * styles.css
+ *
+ * Adapted from:
+ * Computer Science 50
+ * Problem Set 7
+ *
+ * Global CSS.
+ */
+
+.container
+{
+    /* center contents */
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+#middle .form-control
+{
+    /* center form controls */
+    display: inline-block;
+
+    /* override Bootstrap's 100% width for form controls */
+    width: auto;
+}
+
+#bottom
+{
+    /* shrink bottom's font size */
+    font-size: smaller;
+
+    /* surround with whitespace */
+    margin: 20px;
+}
+
+.config
+{
+  /* Rounded Box with blue background */
+  border: 2px solid;
+  border-radius: 25px;
+  box-shadow: 10px 10px 5px #888888;
+  background-color: #A0B0BA;
+  min-width: 350px;
+  margin-left: auto;
+  margin-right: auto;
+  color: #111111;
+
+}
+.config-box
+{
+  margin-right: auto
+}
+
+.mainNavBar{
+  border: 2px solid;
+  border-radius: 25px;
+  box-shadow: 10px 10px 5px #888888;
+  background-color: #1D3269;
+  color: #BBCDFF;
+  font-family: 'Exo', sans-serif
+
+}
+.mainNavBar:hover{
+  border: 2px solid;
+  border-radius: 25px;
+  box-shadow: 10px 10px 5px #888888;
+  background-color: #556FB6;
+  color: #02123F;
+  font-family: 'Exo', sans-serif;
+  /* position:absolute;
+  width:100%;
+  height:100%;
+  top:0;
+  left: 0;
+  z-index: 1
+  background-image: url('../public/img/1px.gif') */
+}
+
+.codesnip{
+
+  overflow-x: scroll;
+        overflow-y: hidden;
+        display: block;
+        line-height: 1.6em;
+        font-size: 16px;
+        white-space: pre;
+        word-wrap: normal;
+}
+.limitWidth{
+
+  width:125px;
+}
