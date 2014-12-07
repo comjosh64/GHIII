@@ -31,13 +31,7 @@
 
     </div>
     <div style="width:100%; height:115px margin-left:auto; margin-right:auto">
-           <a href="newChart.php"> <span class="mainNavBar">&nbsp;  Custom Chart &nbsp; </span></a>
-             <span style="width:15px">&nbsp; </span>
-           <a href="myDevices.php"> <span class="mainNavBar">&nbsp;  My Devices &nbsp; </span></a>
-             <span style="width:15px">&nbsp; </span>
-           <a href="dataMan.php"> <span class="mainNavBar">&nbsp;  Add Data &nbsp; </span></a>
-             <span style="width:15px">&nbsp; </span>
-           <a href="logout.php"> <span class="mainNavBar">&nbsp;  Log Out &nbsp; </span></a>
+           
 
     </div>
     <div style="height:25px">&nbsp;

@@ -35,19 +35,17 @@ if ($task === "current"){
 
 if ($task == "donors"){
   // Calculate number of donors
-  $donors = query("SELECT deviceid FROM devices"){
+  $donors = query("SELECT deviceid FROM devices");
     $lastDonor = "";
     foreach($donors as $donor){
-      
       if ($donors["deviceid"] != $lastDonor){
         $NoDonors++;
       }
-      
       $lastDonor = $donor["deviceid"];
     }
     print($NoDonors);
-  }
 }
+
 
 if ($task == "degrees"){
   //total number of degrees donated, ever
@@ -75,18 +73,22 @@ if ($task == "insert"){
 
 if ($task == "recievers"){
   // no of people recieving degrees
-  query("SELECT deviceid FROM devices WHERE degrees < 0");
-  if (){
+  $recievers = query("SELECT deviceid FROM devices WHERE degrees < 0");
+  if ($recievers === false){
+    apologize("SQL Failed");
+  }
+  else{
+    $NoRecievers = 0;
     $lastDonor = "";
-    foreach($donors as $donor){
+    foreach($recievers as $reciever){
       
-      if ($donors["deviceid"] != $lastDonor){
-        $NoDonors++;
+      if ($reciever["deviceid"] != $lastDonor){
+        $NoRecievers++;
       }
       
-      $lastDonor = $donor["deviceid"];
+      $lastDonor = $reciever["deviceid"];
     }
-    print($NoDonors);
+    print($NoRecievers);
   }
 } 
 

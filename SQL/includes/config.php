@@ -14,7 +14,7 @@
     session_start();
 
     // require authentication for most pages
-    if (!preg_match("{(?:login|logout|register|dataentry|debug)\.php$}", $_SERVER["PHP_SELF"]))
+    if (!preg_match("{(?:login|logout|register|dataentry|debug|get)\.php$}", $_SERVER["PHP_SELF"]))
     {
         if (empty($_SESSION["id"]))
         {
