@@ -69,6 +69,9 @@ body {
     <div class='heatmap boxed-group-inner'>
       <script src="js/d3.min.js"></script>
       <script>
+        var locked_units = [];
+        var global_offset = 0;
+
         var width = 960,
             height = 350,
             cellSize = 17; // cell size
@@ -117,6 +120,14 @@ body {
               .key(function(d) { return d.Id; })
               .rollup(function(d) { return d[0].Temperature; })
               .map(json);
+
+            //disregard locked data
+            if (locked_units) {
+              locked_units.forEach(function(id) {
+                delete data[id];
+              });
+            };
+
 
             //calculate aggregate stats
             $.extend(aggregate_data, data);
@@ -234,6 +245,24 @@ body {
   <br>
   <br>
   <br>
+  <button id='step0'>Use unlive data</button>
+  <script>
+    $('button#step0').click(function() {
+      locked_units = [0,1];
+      setInterval(function() {
+        $.ajax({
+          url: 'http://geogem.org/GlobalHackIII/public/get.php?task=readTemp',
+          type: 'get',
+          success: function(result) {  
+            result = JSON.parse(result) 
+            aggregate_data[0] = result[0];
+            aggregate_data[1] = result[1];
+          },
+        });
+      }, 1000);
+    });
+  </script>
+
   <br>
   <button id='step1'>Make Ladue</button>
   <script>
