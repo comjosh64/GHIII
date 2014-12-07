@@ -1,4 +1,7 @@
 <?php
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Content-Range, Content-Disposition, Content-Description');
 
 require("../includes/config.php");
 $task = " ";
@@ -38,7 +41,7 @@ if ($task == "donors"){
   $donors = query("SELECT deviceid FROM devices");
     $lastDonor = "";
     foreach($donors as $donor){
-      if ($donors["deviceid"] != $lastDonor){
+      if ($donor["deviceid"] != $lastDonor){
         $NoDonors++;
       }
       $lastDonor = $donor["deviceid"];
@@ -91,6 +94,35 @@ if ($task == "recievers"){
     print($NoRecievers);
   }
 } 
+
+if ($task == "tempActual"){
+  // Update temp in device
+  $updateTemp = query("UPDATE recipients SET targetTemp = (?) WHERE deviceid = (?)", $_GET["temp"], $_GET["deviceid"]);
+  if ($updateTemp === false){
+    apologize("SQL failed");
+  }
+}
+
+if ($task == "readTemp"){
+  $tempActual = query("SELECT targetTemp, deviceid FROM recipients");
+  if ($tempActual === false){
+    apologize("SQL failed");
+  }
+  else{
+    $deviceid0 = "";
+    $deviceid1 = "";
+    foreach($tempActual as $tempA){
+      if ($tempA["deviceid"] == 0){
+        $deviceid0 = $tempA["targetTemp"];
+      }
+      else if ($tempA["deviceid"] == 1){
+        $deviceid1 = $tempA["targetTemp"];
+      }
+    }
+    print("[" . $deviceid0 . ", " . $deviceid1 . "]");
+
+  }
+}
 
 
 
