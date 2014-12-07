@@ -58,6 +58,11 @@ body {
 
 </style>
 <body>
+
+  <script src="js/jquery.signalR-1.1.3.js" type="text/javascript"  ></script>
+  <script src="js/config.js" type="text/javascript"  ></script>
+  <script src="js/thermostat.js" type="text/javascript"  ></script>
+
 <div class="contributions-tab">
   <div class="boxed-group flush">
     <h3>Donate Degrees</h3>
@@ -104,8 +109,6 @@ body {
         rect.append("title")
             .text(function(d) { return d; });
 
-        inNeed = 0;
-        energyUsage = 0;
         aggregate_data = {};
 
         function load_data(source) {
@@ -119,35 +122,37 @@ body {
             $.extend(aggregate_data, data);
 
             var totalTemp = 0;
+            var inNeed = 0;
+            var energyUsage = 0;
+
             rect.filter(function(d) { 
               return d in aggregate_data; 
             }).each(function(d) {
               if (aggregate_data[d] < 55) {
                 inNeed += 1;
+                aggregate_data[d] += global_offset;
               }
               totalTemp += aggregate_data[d];
             });
             energyUsage = Math.round(totalTemp); // / Object.keys(aggregate_data).length);
 
-            //update the heatmap
-            rect.filter(function(d) { 
-              return d in data; 
-            })
-              .attr("class", function(d) { return "day " + color(data[d]); })
-              .select("title")
-              .text(function(d) { return d + ": " + data[d] + " degrees fahrenheit"; });
+            // //put data into the summary box
+            if (document.getElementById('in-need')) {
+              document.getElementById('in-need').innerHTML = inNeed;
+            }
+
+            if (document.getElementById('energy-usage')) {
+              document.getElementById('energy-usage').innerHTML = energyUsage;
+            }
+
+            // //update the heatmap
+            // rect.filter(function(d) { 
+            //   return d in data; 
+            // })
+            //   .attr("class", function(d) { return "day " + color(data[d]); })
+            //   .select("title")
+            //   .text(function(d) { return d + ": " + data[d] + " degrees fahrenheit"; });
           });
-
-          // //put data into the summary box
-          if (document.getElementById('in-need')) {
-            document.getElementById('in-need').innerHTML = inNeed;
-          }
-          inNeed = 0;
-
-          if (document.getElementById('energy-usage')) {
-            document.getElementById('energy-usage').innerHTML = energyUsage;
-          }
-          energyUsage = 0;
         }
 
 
@@ -156,7 +161,40 @@ body {
         load_data("sample.json");
         setInterval(function() {
           load_data("update.json");
+          load_data("update-1.json");
+          load_data("manual-update.json");
+
+          rect.filter(function(d) { 
+              return d in aggregate_data; 
+            })
+              .attr("class", function(d) { return "day " + color(aggregate_data[d]); })
+              .select("title")
+              .text(function(d) { return d + ": " + aggregate_data[d] + " degrees fahrenheit"; });
         }, 1000);
+
+        setInterval(function() {
+          $.ajax({
+              url: 'http://geogem.org/GlobalHackIII/public/get.php?task=current',
+              type: 'get',
+              success: function(result) {
+                if (document.getElementById('donated-degrees')) {
+                  document.getElementById('donated-degrees').innerHTML = result;
+                }              
+              }
+          });
+        }, 5000);
+
+        setInterval(function() {
+          $.ajax({
+              url: 'http://geogem.org/GlobalHackIII/public/get.php?task=donors',
+              type: 'get',
+              success: function(result) {
+                if (document.getElementById('donor-count')) {
+                  document.getElementById('donor-count').innerHTML = result;
+                }              
+              }
+          });
+        }, 5000);
 
       </script>
       <div class="contrib-footer clearfix">
@@ -166,7 +204,7 @@ body {
       </div>
     </div>
     <div class="contrib-column table-column">
-      <span class="text-muted">Number of people who are in need:</span>
+      <span class="text-muted">Number of homes in need:</span>
       <span class="contrib-number">
         <span id="in-need">_</span>
         <span> Houses</span>
@@ -187,9 +225,99 @@ body {
         <span id="donated-degrees">_</span>
         <span> &deg;</span>
       </span>
-      <span class="text-muted">by 50 people</span>
+      <span class="text-muted">Number of Donators: <span id="donor-count">0</span></span>
     </div>
   <div>
+</div>
+
+<div class="debug">
+  <br>
+  <br>
+  <br>
+  <br>
+  <button id='step1'>Make Ladue</button>
+  <script>
+    $('button#step1').click(function() {
+      $.ajax({
+        url: 'http://localhost:4567/submit_batch',
+        type: 'put',
+        data: {0: 72, 1:72, 2:71, 3:72, 4:72, 5:72, 6:72, 7:72, 8:72, 9:72, 10:72, 11:72, 12:71, 13:72, 14:72, 15:72, 16:72, 17:72, 18:72, 19:72, 20:72, 21:72, 22:71, 23:72, 24:72, 25:72, 26:72, 27:72, 28:72, 29:72},
+        success: function(result) {
+            // Do something with the result
+        }
+      });
+    });
+  </script>
+  
+  <button id='step2'>Make Cold</button>
+  <script>
+    $('button#step2').click(function() {
+      $.ajax({
+        url: 'http://localhost:4567/submit_batch',
+        type: 'put',
+        data: {30: 32, 31:32, 32:32, 33:32, 34:32, 35:32},
+        success: function(result) {
+            // Do something with the result
+        }
+      });
+    });
+  </script>
+
+  <br>
+  <button id='step3'>Ladue Donate</button>
+  <script>
+    $('button#step3').click(function() {
+      $.ajax({
+          url: 'http://geogem.org/GlobalHackIII/public/get.php?task=insert&deviceid=1&degrees=100 ',
+          type: 'get',
+          success: function(result) {            
+          }
+      });
+    });
+  </script>
+
+  <button id='step4'>Warm Houses</button>
+  <script>
+    $('button#step4').click(function() {
+      $.ajax({
+        url: 'http://localhost:4567/submit_batch',
+        type: 'put',
+        data: {30: 65, 31:65, 32:65, 33:65, 34:65, 35:65},
+        success: function(result) {
+            // Do something with the result
+        }
+      });
+    });
+    $('button#step4').click(function() {
+      $.ajax({
+          url: 'http://geogem.org/GlobalHackIII/public/get.php?task=insert&deviceid=1&degrees=-150 ',
+          type: 'get',
+          success: function(result) {            
+          }
+      });
+    });
+  </script>
+
+  <br>
+
+  <button id='step5'>Mass Donate</button>
+  <script>
+    $('button#step5').click(function() {
+      $.ajax({
+          url: 'http://geogem.org/GlobalHackIII/public/get.php?task=insert&deviceid=1&degrees=800 ',
+          type: 'get',
+          success: function(result) {            
+          }
+      });
+    });
+  </script>
+
+  <button id='step6'>Keep Everybody Warm</button>
+  <script>
+    $('button#step6').click(function() {
+      global_offset = 20;
+    });
+  </script>
 </div>
 
 </body>

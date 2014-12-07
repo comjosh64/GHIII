@@ -41,53 +41,55 @@ class MiniSensi
   end
 end
 
-ids = (0...1000).to_a
-sensi_bin = []
+if __FILE__ == $0
+  ids = (0...1000).to_a
+  sensi_bin = []
 
-poor_sensi = {
-  :temperature => Proc.new { rand(32..60) },
-  :working_heat_setpoint => Proc.new { rand(50..65) },
-  :system_status => Proc.new { (['off'] * 3 + ['on']).sample }
-}
+  poor_sensi = {
+    :temperature => Proc.new { rand(32..60) },
+    :working_heat_setpoint => Proc.new { rand(50..65) },
+    :system_status => Proc.new { (['off'] * 3 + ['on']).sample }
+  }
 
-medium_sensi = {
-  :temperature => Proc.new { rand(60..72) },
-  :working_heat_setpoint => Proc.new { rand(68..74) }
-}
+  medium_sensi = {
+    :temperature => Proc.new { rand(60..72) },
+    :working_heat_setpoint => Proc.new { rand(68..74) }
+  }
 
-rich_sensi = {
-  :temperature => Proc.new { rand(72..72) },
-  :working_heat_setpoint => Proc.new { rand(70..72) }
-}
+  rich_sensi = {
+    :temperature => Proc.new { rand(72..72) },
+    :working_heat_setpoint => Proc.new { rand(70..72) }
+  }
 
-(0..100).each {|n|
-  sensi = poor_sensi.clone
-  sensi[:id] = ids.sample
-  ids.delete(sensi[:id])
+  (0..100).each {|n|
+    sensi = poor_sensi.clone
+    sensi[:id] = ids.sample
+    ids.delete(sensi[:id])
 
-  sensi_bin.push(MiniSensi.new(sensi))
-}
+    sensi_bin.push(MiniSensi.new(sensi))
+  }
 
-(0..800).each {|n|
-  sensi = medium_sensi.clone
-  sensi[:id] = ids.sample
-  ids.delete(sensi[:id])
+  (0..800).each {|n|
+    sensi = medium_sensi.clone
+    sensi[:id] = ids.sample
+    ids.delete(sensi[:id])
 
-  sensi_bin.push(MiniSensi.new(sensi))
-}
+    sensi_bin.push(MiniSensi.new(sensi))
+  }
 
-(0..100).each {|n|
-  sensi = rich_sensi.clone
-  sensi[:id] = ids.sample
-  ids.delete(sensi[:id])
+  (0..100).each {|n|
+    sensi = rich_sensi.clone
+    sensi[:id] = ids.sample
+    ids.delete(sensi[:id])
 
-  sensi_bin.push(MiniSensi.new(sensi))
-}
+    sensi_bin.push(MiniSensi.new(sensi))
+  }
 
-require 'json'
-while(true) 
-  data = (0..100).map { sensi_bin.sample.generate }
-  # puts data.to_json
-  File.open('/home/dummey/Documents/GHIII/backendUI/test/update.json', 'w+') { |file| file.write(data.to_json) }
-  sleep 1
+  require 'json'
+  while(true) 
+    data = (0..100).map { sensi_bin.sample.generate }
+    # puts data.to_json
+    File.open('/home/dummey/Documents/GHIII/backendUI/test/update.json', 'w+') { |file| file.write(data.to_json) }
+    sleep 1
+  end
 end

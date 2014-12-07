@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title>SignalR Sensi Example</title>
+	<script src="js/jquery-1.9.1.js" type="text/javascript" ></script>
+</head>
+<body>	
+	<script src="js/jquery.signalR-1.1.3.js" type="text/javascript"  ></script>
+	<script src="js/config.js" type="text/javascript"  ></script>
+	<script src="js/thermostat.js" type="text/javascript"  ></script>
+    <script src="js/sensi2.js" type="text/javascript"></script> 
+
+    <div id="print" />
+    <script type="text/javascript">
+        var last_data;
+
+        $( document ).ready(function() {
+            Sensi.GetThermostatList().done(function (data) {
+                console.log(data);
+
+                Sensi.log(data);
+            });
+        });
+    </script>
+</body>
+</html>

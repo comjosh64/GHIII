@@ -60,9 +60,22 @@ Sensi2.StartSignalR = function() {
 		Sensi2.log("Online");
 	}
 	
-	Sensi2.Thermostat.client.update = function (icd, model) {
-		Sensi2.log("Update");
-		Sensi2.log(model);
+	Sensi.Thermostat.client.update = function (icd, model) {
+		Sensi.log("Update");
+
+		last_data = model;
+
+		if (model.OperationalStatus && model.OperationalStatus.Temperature) {
+	        $.ajax({
+	            url: 'http://localhost:4567/submit',
+	            type: 'put',
+	            data: {temperature: model.OperationalStatus.Temperature.F, id: 2},
+	            success: function(result) {
+	                // Do something with the result
+	            }
+	        });
+	    };
+		Sensi.log(model);
 	}
 	
 	Sensi2.Thermostat.client.offline = function (icd) {

@@ -7,6 +7,7 @@ Sensi.Thermostat = $.connection.thermostat;
 Sensi.UserName = "team17@globalhack.com";
 Sensi.Password = "globalhack";
 Sensi.ICDID = "36-6f-92-ff-fe-01-39-e9";
+Sensi.ICDID2 = "36-6f-92-ff-fe-01-18-3b";
 
 // End Points
 Sensi.AuthorizeEndpoint = Sensi.Config.Api + 'authorize';
@@ -35,9 +36,8 @@ Sensi.LoginAndStartSignalR = function() {
 			Can get all of the ICDID's associated with this account if you uncomment below call
 			
 			Sensi.log("Retreiving Thermostats");
-			Sensi.GetThermostatList().done(function (data) {
-				Sensi.log(data); 
-			});*/
+			Sensi.GetThermostatList().done(function (data) {Sensi.log(data);});
+			*/
 		});
 }
 
@@ -62,6 +62,19 @@ Sensi.StartSignalR = function() {
 	
 	Sensi.Thermostat.client.update = function (icd, model) {
 		Sensi.log("Update");
+
+		last_data = model;
+
+		if (model.OperationalStatus && model.OperationalStatus.Temperature) {
+	        $.ajax({
+	            url: 'http://localhost:4567/submit',
+	            type: 'put',
+	            data: {temperature: model.OperationalStatus.Temperature.F, id: icd},
+	            success: function(result) {
+	                // Do something with the result
+	            }
+	        });
+	    };
 		Sensi.log(model);
 	}
 	
